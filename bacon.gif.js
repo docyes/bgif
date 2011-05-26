@@ -1,12 +1,12 @@
 var n$ = {};
 (function(ns){
-    function Tracker(beacon, options){
+    function BGIF(beacon, options){
         this.beacon = beacon;
         this.options = options || {};
         this.queryPrefix = (this.options.queryPrefix)?"?":"";
         this.enabled = this.options.hasOwnProperty("enabled")?this.options.enabled:true;
     }
-    Tracker.prototype.log = function(kv){
+    BGIF.prototype.log = function(kv){
         if(!this.enabled){
             return;
         }
@@ -21,6 +21,6 @@ var n$ = {};
         var src = this.beacon + this.queryPrefix + params.join("").substr(1);
         (new Image()).src = src;
     };
-    ns.Tracker = Tracker;
+    ns.BGIF = BGIF;
 })(n$);
 

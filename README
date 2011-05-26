@@ -7,13 +7,17 @@ Inspired by the spacer.gif, bacon.gif is a little bitty javascript library for l
 
 html
 ----
-<a href="#" id="buynow">Buy Now</a>
+<a href="#" id="buynow">Buy Now!</a>
 
 javascript
 ----------
-var track = new Tracker('http://featureblend.com/static/beacon.gif');
+var bgif = new BGIF('http://featureblend.com/static/beacon.gif');
 document.getElementById('buynow').addEventListener('mouseover', function(){
-    track.log({type: 'mouseover', target: 'a', goal: 'buynow'});
+    bgif.log({
+        type: 'mouseover',
+        target: 'a',
+        goal: 'buynow'
+    });
 });
 
 access.log
