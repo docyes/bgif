@@ -1,5 +1,6 @@
 bacon.gif
 =========
+
 overview
 --------
 Inspired by the spacer.gif, bacon.gif is a little bitty javascript library for logging to http access logs, asyncronously and fast.
