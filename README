@@ -1,6 +1,6 @@
-A little JavaScript asyncronous tracking beacon.
+-- description --
+a little JavaScript asyncronous tracking beacon
 
-Example:
 -- html --
 <a href="#" id="buynow">Buy Now</a>
 
