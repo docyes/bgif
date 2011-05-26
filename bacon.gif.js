@@ -1,5 +1,13 @@
 var n$ = {};
 (function(ns){
+    /**
+     * THAT'S ONE BGIF!
+     *
+     * @param {String} beacon The fully qualified HTTP resource to handle beacon requests.
+     * @param {Object} options
+     *                 @param {Boolean} enabled Defaults to true, disable/enable HTTP requests.
+     *                 @param {Boolean} queryPrefix Defaults to empty false, add or remove the ? prefix from passed beacon string. 
+     */
     function BGIF(beacon, options){
         this.beacon = beacon;
         this.options = options || {};
@@ -10,15 +18,15 @@ var n$ = {};
         if(!this.enabled){
             return;
         }
-        var params = [];
+        var p = [];
         kv._cb = (new Date()).getTime();
         for(var k in kv){
-            params.push("&");
-            params.push(encodeURIComponent(k));
-            params.push("=");
-            params.push(encodeURIComponent(kv[k]));
+            p.push("&");
+            p.push(encodeURIComponent(k));
+            p.push("=");
+            p.push(encodeURIComponent(kv[k]));
         }
-        var src = this.beacon + this.queryPrefix + params.join("").substr(1);
+        var src = this.beacon + this.queryPrefix + p.join("").substr(1);
         (new Image()).src = src;
     };
     ns.BGIF = BGIF;
