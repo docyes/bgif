@@ -11,9 +11,14 @@ var n$ = {};
     function BGIF(beacon, options){
         this.beacon = beacon;
         this.options = options || {};
-        this.queryPrefix = (this.options.queryPrefix)?"?":"";
-        this.enabled = this.options.hasOwnProperty("enabled")?this.options.enabled:true;
+        this.queryPrefix = this.options.queryPrefix ? '?' : '';
+        this.enabled = this.options.hasOwnProperty('enabled') ? this.options.enabled : true;
     }
+    /**
+     * LOG DAT SHIT!
+     *
+     * @param {Object} kv A one-level deep object literal of key/value pairs. Don't worry about escaping BGIF do it!
+     */
     BGIF.prototype.log = function(kv){
         if(!this.enabled){
             return;
