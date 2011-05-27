@@ -23,7 +23,8 @@ var n$ = {};
         if(!this.e){
             return;
         }
-        var p = [],
+        var s,
+            p = [],
             e = encodeURIComponent;
         kv._cb = (new Date()).getTime();
         for(var k in kv){
@@ -34,7 +35,7 @@ var n$ = {};
                 e(kv[k])
             ]);
         }
-        var s = this.b + this.qP + p.join('').substr(1);
+        s = this.b + this.qP + p.join('').substr(1);
         (new Image()).src = s;
     };
     ns.BGIF = BGIF;
