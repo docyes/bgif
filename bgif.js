@@ -9,10 +9,10 @@ var n$ = {};
      *                 @param {Boolean} queryPrefix Defaults to empty false, add or remove the ? prefix from passed beacon string. 
      */
     function BGIF(beacon, options){
-        this.beacon = beacon;
-        this.options = options || {};
-        this.queryPrefix = this.options.queryPrefix ? '?' : '';
-        this.enabled = this.options.hasOwnProperty('enabled') ? this.options.enabled : true;
+        this.b = beacon;
+        this.o = options || {};
+        this.qP = this.o.queryPrefix ? '?' : '';
+        this.e = this.o.hasOwnProperty('enabled') ? this.o.enabled : true;
     }
     /**
      * LOG DAT SHIT!
@@ -20,19 +20,22 @@ var n$ = {};
      * @param {Object} kv A one-level deep object literal of key/value pairs. Don't worry about escaping BGIF do it!
      */
     BGIF.prototype.log = function(kv){
-        if(!this.enabled){
+        if(!this.e){
             return;
         }
-        var p = [];
+        var p = [],
+            e = encodeURIComponent;
         kv._cb = (new Date()).getTime();
         for(var k in kv){
-            p.push("&");
-            p.push(encodeURIComponent(k));
-            p.push("=");
-            p.push(encodeURIComponent(kv[k]));
+            p.concat([
+                '&',
+                e(k),
+                '=',
+                e(kv[k])
+            ]);
         }
-        var src = this.beacon + this.queryPrefix + p.join("").substr(1);
-        (new Image()).src = src;
+        var s = this.b + this.qP + p.join('').substr(1);
+        (new Image()).src = s;
     };
     ns.BGIF = BGIF;
 })(n$);
