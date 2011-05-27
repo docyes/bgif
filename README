@@ -24,7 +24,7 @@
 
 overview
 --------
-Inspired by the spacer.gif, bgif is a little bitty javascript library for logging from the browser to http access logs, asyncronously and fast.
+Inspired by the spacer.gif, bgif is a little bitty javascript library for logging from the browser to http access logs, asyncronously and fast. Based on the original work from www.geobacon.com
 
 html
 ----
