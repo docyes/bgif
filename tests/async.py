@@ -1,6 +1,21 @@
 import tornado, tornado.httpserver, tornado.ioloop, tornado.web
 
-class MainHandler(tornado.web.RequestHandler):
+class HomeHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write("""
+        <html>
+            <head><title>async</title></head>
+            <body>
+                <script>
+                    var img = new Image();
+                    img.src = '/img.jpg?' + (new Date()).getTime();
+                    alert('test');
+                </script>
+            </body>
+        </html>
+        """)
+
+class ImgHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous 
     def get(self):
         content = open('async.jpg').read()
@@ -15,7 +30,8 @@ class MainHandler(tornado.web.RequestHandler):
         print '-'
 
 application = tornado.web.Application([
-    (r'/', MainHandler),
+    (r'/', HomeHandler),
+    (r'/img.jpg', ImgHandler),
 ])
 
 if __name__ == '__main__':
