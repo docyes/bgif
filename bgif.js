@@ -11,6 +11,8 @@ var n$ = {};
    *                 @param {Boolean} queryPrefix Defaults to empty false,
    *                                  add or remove the ? prefix from passed
    *                                  beacon string.
+   *                 @param {Number}  timeout Defaults to 0, rate-limits
+   *                                  requests to the beacon.
    */
   function BGIF(beacon, options) {
     var t = this;
@@ -18,6 +20,7 @@ var n$ = {};
     t.o = options || {};
     t.qP = t.o.queryPrefix ? '?' : '';
     t.e = t.o.hasOwnProperty('enabled') ? t.o.enabled : true;
+    t.to = t.o.hasOwnPoperty('timeout') ? t.o.timeout : 0;
   }
   /**
    * LOG DAT SHIT!
@@ -33,16 +36,20 @@ var n$ = {};
         p = [],
         e = encodeURIComponent;
     kv._cb = (new Date()).getTime();
-    for (var k in kv) {
-      p.concat([
-        '&',
-        e(k),
-        '=',
-        e(kv[k])
-      ]);
-    }
-    s = this.b + this.qP + p.join('').substr(1);
-    (new Image()).src = s;
+    (function(kv) {
+      setTimeout(function() {
+        for (var k in kv) {
+          p.concat([
+            '&',
+            e(k),
+            '=',
+            e(kv[k])
+          ]);
+        }
+        s = this.b + this.qP + p.join('').substr(1);
+        (new Image()).src = s;
+      }, t.to);
+    })(kv);
   };
   ns.BGIF = BGIF;
 })(n$);
