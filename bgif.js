@@ -13,10 +13,11 @@ var n$ = {};
    *                                  beacon string.
    */
   function BGIF(beacon, options) {
-    this.b = beacon;
-    this.o = options || {};
-    this.qP = this.o.queryPrefix ? '?' : '';
-    this.e = this.o.hasOwnProperty('enabled') ? this.o.enabled : true;
+    var t = this;
+    t.b = beacon;
+    t.o = options || {};
+    t.qP = t.o.queryPrefix ? '?' : '';
+    t.e = t.o.hasOwnProperty('enabled') ? t.o.enabled : true;
   }
   /**
    * LOG DAT SHIT!
