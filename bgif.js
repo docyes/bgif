@@ -13,7 +13,8 @@ var n$ = {};
    *                                  beacon string.
    *                 @param {Number}  timeout Defaults to 0, rate-limits
    *                                  requests to the beacon.
-   *                 @param {Number}  concurrent Defaults to 1, max concurrent connections.
+   *                 @param {Number}  concurrent Defaults to 1, max concurrent
+   *                                  connections.
    */
   function BGIF(beacon, options) {
     var t = this;
@@ -36,7 +37,7 @@ var n$ = {};
       return;
     }
     (function(kv) {
-      if (this.connections.length>=this.concurrent){
+      if (this.connections.length >= this.concurrent) {
         clearTimeout(this.concurrent.shift());
       }
       var connection = setTimeout(
@@ -55,8 +56,8 @@ var n$ = {};
             }
             s = this.beacon + this.queryPrefix + p.join('').substr(1);
             (new Image()).src = s;
-            for (var i=0, l=this.connections.length; i<l; i++) {
-              if (this.connections[i]==connection) {
+            for (var i = 0, l = this.connections.length; i < l; i++) {
+              if (this.connections[i] == connection) {
                 this.connections.splice(i);
                 break;
               }
