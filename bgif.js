@@ -35,23 +35,22 @@ var n$ = {};
     if (!this.enabled) {
       return;
     }
-    var s,
-        p = [],
-        e = encodeURIComponent;
-    kv._cb = (new Date()).getTime();
     (function(kv) {
       if (this.connections.length>=this.concurrent){
         clearTimeout(this.concurrent.shift());
       }
       var connection = setTimeout(
         (function(connection) {
+          var s,
+            p = [],
+            kv._cb = (new Date()).getTime();
           return function() {
             for (var k in kv) {
               p.concat([
                 '&',
-                e(k),
+                encodeURIComponent(k),
                 '=',
-                e(kv[k])
+                encodeURIComponent(kv[k])
               ]);
             }
             s = this.beacon + this.queryPrefix + p.join('').substr(1);
