@@ -36,38 +36,36 @@ var n$ = {};
     if (!this.enabled) {
       return;
     }
-    (function(kv) {
-      if (this.connections.length >= this.concurrent) {
-        clearTimeout(this.concurrent.shift());
-      }
-      var connection = setTimeout(
-        (function(connection) {
-          var s,
-            p = [],
-            kv._cb = (new Date()).getTime();
-          return function() {
-            for (var k in kv) {
-              p.concat([
-                '&',
-                encodeURIComponent(k),
-                '=',
-                encodeURIComponent(kv[k])
-              ]);
-            }
-            s = this.beacon + this.queryPrefix + p.join('').substr(1);
-            (new Image()).src = s;
-            for (var i = 0, l = this.connections.length; i < l; i++) {
-              if (this.connections[i] == connection) {
-                this.connections.splice(i);
-                break;
-              }
+    if (this.connections.length >= this.concurrent) {
+      clearTimeout(this.concurrent.shift());
+    }
+    var connection = setTimeout(
+      (function(kv, connection) {
+        var s,
+          p = [],
+          kv._cb = (new Date()).getTime();
+        return function() {
+          for (var k in kv) {
+            p.concat([
+              '&',
+              encodeURIComponent(k),
+              '=',
+              encodeURIComponent(kv[k])
+            ]);
+          }
+          s = this.beacon + this.queryPrefix + p.join('').substr(1);
+          (new Image()).src = s;
+          for (var i = 0, l = this.connections.length; i < l; i++) {
+            if (this.connections[i] == connection) {
+              this.connections.splice(i);
+              break;
             }
           }
-        })(connection),
-        this.timeout
-      );
-      this.connections.push(connection);
-    })(kv);
+        }
+      })(kv, connection), 
+      this.timeout
+    );
+    this.connections.push(connection);
   };
   ns.BGIF = BGIF;
 })(n$);
