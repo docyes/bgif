@@ -4,22 +4,23 @@ var n$ = {};
    * THAT'S ONE BGIF!
    *
    * @param {String} beacon The fully qualified HTTP resource to handle
-   *                 beacon requests.
-   * @param {Object} options Optional object literal of options.
+   *                 requests.
+   * @param {Object} options Optional object literal of optional config
+   *                                  params..
    *                 @param {Boolean} enabled Defaults to true,
    *                                  disable/enable HTTP requests.
-   *                 @param {Boolean} queryPrefix Defaults to empty false,
-   *                                  add or remove the ? prefix from passed
-   *                                  beacon string.
+   *                 @param {Boolean} prefix Defaults to true,
+   *                                  add/remove the ? prefix to
+   *                                  to the beacon path.
    *                 @param {Number}  defer Defaults to 0, the total ms to
    *                                  wait before making a request.
    *                 @param {Number}  concurrent Defaults to 1, the maximum
    *                                  number of concurrent connections.
    */
-  function BGIF(beacon, options) {
-    this.beacon = beacon;
+  function BGIF(path, options) {
+    this.path = path;
     this.options = options || {};
-    this.queryPrefix = this.options.queryPrefix ? '?' : '';
+    this.prefix = this.options.prefix ? '?' : '';
     this.enabled = this.options.hasOwnProperty('enabled') ?
         this.options.enabled : true;
     this.defer = this.options.hasOwnPoperty('defer') ? this.options.defer : 0;
@@ -50,7 +51,7 @@ var n$ = {};
             ['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]
         );
       }
-      src = this.beacon + this.queryPrefix + params.join('').substr(1);
+      src = this.path + this.prefix + params.join('').substr(1);
       img.onload = function() {
         for (var i = 0, l = this.connections.length; i < l; i++) {
           if (this.connections[i] == connection) {
