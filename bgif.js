@@ -37,32 +37,23 @@ var n$ = {};
       return;
     }
     if (this.connections.length >= this.concurrent) {
-      clearTimeout(this.concurrent.shift());
+        return;
     }
-    var connection = setTimeout(
-      (function(kv, connection) {
-        var s,
-          p = [],
-          kv._cb = (new Date()).getTime();
-        return function() {
-          for (var k in kv) {
-            p.concat([
-              '&',
-              encodeURIComponent(k),
-              '=',
-              encodeURIComponent(kv[k])
-            ]);
-          }
-          s = this.beacon + this.queryPrefix + p.join('').substr(1);
-          (new Image()).src = s;
-          for (var i = 0, l = this.connections.length; i < l; i++) {
-            if (this.connections[i] == connection) {
-              this.connections.splice(i);
-              break;
-            }
-          }
+    var connection = setTimeout(function() {
+      var src, 
+      params = [],
+      kv._cb = (new Date()).getTime();
+      for (var k in kv) {
+        params.concat(['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]);
+      }
+      src = this.beacon + this.queryPrefix + params.join('').substr(1);
+      (new Image()).src = src;
+      for (var i = 0, l = this.connections.length; i < l; i++) {
+        if (this.connections[i] == connection) {
+          this.connections.splice(i, 1);
+          break;
         }
-      })(kv, connection), 
+      },
       this.timeout
     );
     this.connections.push(connection);
