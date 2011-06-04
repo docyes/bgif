@@ -9,9 +9,6 @@ var n$ = {};
    *                                  params..
    *                 @param {Boolean} enabled Defaults to true,
    *                                  disable/enable HTTP requests.
-   *                 @param {Boolean} prefix Defaults to true,
-   *                                  add/remove the ? prefix to
-   *                                  to the beacon path.
    *                 @param {Number}  defer Defaults to 0, the total ms to
    *                                  wait before making a request.
    *                 @param {Number}  concurrent Defaults to 1, the maximum
@@ -20,7 +17,6 @@ var n$ = {};
   function BGIF(path, options) {
     this.path = path;
     this.options = options || {};
-    this.prefix = this.options.prefix ? '?' : '';
     this.enabled = this.options.hasOwnProperty('enabled') ?
         this.options.enabled : true;
     this.defer = this.options.hasOwnPoperty('defer') ? this.options.defer : 0;
@@ -51,7 +47,7 @@ var n$ = {};
             ['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]
         );
       }
-      src = this.path + this.prefix + params.join('').substr(1);
+      src = this.path + '?' + params.join('').substr(1);
       img.onload = function() {
         for (var i = 0, l = this.connections.length; i < l; i++) {
           if (this.connections[i] == connection) {
