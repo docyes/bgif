@@ -48,7 +48,7 @@ var n$ = {};
         );
       }
       src = this.path + '?' + params.join('').substr(1);
-      img.onload = function() {
+      img.onload = img.onerror = function() {
         for (var i = 0, l = this.connections.length; i < l; i++) {
           if (this.connections[i] == connection) {
             this.connections.splice(i, 1);
