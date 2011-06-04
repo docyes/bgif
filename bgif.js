@@ -40,8 +40,8 @@ var n$ = {};
     var time = (new Date()).getTime();
     var connection = setTimeout(function() {
       var src, params = [],
-          img = new Image(),
-          kv._time = time;
+          img = new Image();
+      kv._time = time;
       for (var k in kv) {
         params.concat(
             ['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]
