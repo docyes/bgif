@@ -11,20 +11,19 @@ var n$ = {};
    *                 @param {Boolean} queryPrefix Defaults to empty false,
    *                                  add or remove the ? prefix from passed
    *                                  beacon string.
-   *                 @param {Number}  timeout Defaults to 0, rate-limits
-   *                                  requests to the beacon.
-   *                 @param {Number}  concurrent Defaults to 1, max concurrent
-   *                                  connections.
+   *                 @param {Number}  defer Defaults to 0, the total ms to          
+   *                                  wait before making a request.
+   *                 @param {Number}  concurrent Defaults to 1, the maximum
+   *                                  number of concurrent connections.
    */
   function BGIF(beacon, options) {
-    var t = this;
-    t.beacon = beacon;
-    t.o = options || {};
-    t.queryPrefix = t.o.queryPrefix ? '?' : '';
-    t.enabled = t.o.hasOwnProperty('enabled') ? t.o.enabled : true;
-    t.timeout = t.o.hasOwnPoperty('timeout') ? t.o.timeout : 0;
-    t.concurrent = t.o.hasOwnProperty('concurrent') ? t.o.concurrent : 1;
-    t.connections = [];
+    this.beacon = beacon;
+    this.options = options || {};
+    this.queryPrefix = this.options.queryPrefix ? '?' : '';
+    this.enabled = this.options.hasOwnProperty('enabled') ? this.options.enabled : true;
+    this.defer = this.options.hasOwnPoperty('defer') ? this.options.defer : 0;
+    this.concurrent = this.options.hasOwnProperty('concurrent') ? this.options.concurrent : 1;
+    this.connections = [];
   }
   /**
    * LOG DAT SHIT!
@@ -39,22 +38,28 @@ var n$ = {};
     if (this.connections.length >= this.concurrent) {
         return;
     }
-    var connection = setTimeout(function() {
-      var src, 
-      params = [],
-      kv._cb = (new Date()).getTime();
-      for (var k in kv) {
-        params.concat(['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]);
-      }
-      src = this.beacon + this.queryPrefix + params.join('').substr(1);
-      (new Image()).src = src;
-      for (var i = 0, l = this.connections.length; i < l; i++) {
-        if (this.connections[i] == connection) {
-          this.connections.splice(i, 1);
-          break;
+    var time = (new Date()).getTime();
+    var connection = setTimeout(
+      function() {
+        var src,
+        params = [],
+        img = new Image(),
+        kv._time = time;
+        for (var k in kv) {
+          params.concat(['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]);
         }
+        src = this.beacon + this.queryPrefix + params.join('').substr(1);
+        img.onload = function(){
+          for (var i = 0, l = this.connections.length; i < l; i++) {
+            if (this.connections[i] == connection) {
+              this.connections.splice(i, 1);
+              break;
+            }
+          }
+        }
+        img.src = src;
       },
-      this.timeout
+      this.defer
     );
     this.connections.push(connection);
   };
