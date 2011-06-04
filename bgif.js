@@ -11,7 +11,7 @@ var n$ = {};
    *                 @param {Boolean} queryPrefix Defaults to empty false,
    *                                  add or remove the ? prefix from passed
    *                                  beacon string.
-   *                 @param {Number}  defer Defaults to 0, the total ms to          
+   *                 @param {Number}  defer Defaults to 0, the total ms to
    *                                  wait before making a request.
    *                 @param {Number}  concurrent Defaults to 1, the maximum
    *                                  number of concurrent connections.
@@ -20,9 +20,11 @@ var n$ = {};
     this.beacon = beacon;
     this.options = options || {};
     this.queryPrefix = this.options.queryPrefix ? '?' : '';
-    this.enabled = this.options.hasOwnProperty('enabled') ? this.options.enabled : true;
+    this.enabled = this.options.hasOwnProperty('enabled') ?
+        this.options.enabled : true;
     this.defer = this.options.hasOwnPoperty('defer') ? this.options.defer : 0;
-    this.concurrent = this.options.hasOwnProperty('concurrent') ? this.options.concurrent : 1;
+    this.concurrent = this.options.hasOwnProperty('concurrent') ?
+        this.options.concurrent : 1;
     this.connections = [];
   }
   /**
@@ -36,31 +38,29 @@ var n$ = {};
       return;
     }
     if (this.connections.length >= this.concurrent) {
-        return;
+      return;
     }
     var time = (new Date()).getTime();
-    var connection = setTimeout(
-      function() {
-        var src,
-        params = [],
-        img = new Image(),
-        kv._time = time;
-        for (var k in kv) {
-          params.concat(['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]);
-        }
-        src = this.beacon + this.queryPrefix + params.join('').substr(1);
-        img.onload = function(){
-          for (var i = 0, l = this.connections.length; i < l; i++) {
-            if (this.connections[i] == connection) {
-              this.connections.splice(i, 1);
-              break;
-            }
+    var connection = setTimeout(function() {
+      var src, params = [],
+          img = new Image(),
+          kv._time = time;
+      for (var k in kv) {
+        params.concat(
+            ['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]
+        );
+      }
+      src = this.beacon + this.queryPrefix + params.join('').substr(1);
+      img.onload = function() {
+        for (var i = 0, l = this.connections.length; i < l; i++) {
+          if (this.connections[i] == connection) {
+            this.connections.splice(i, 1);
+            break;
           }
         }
-        img.src = src;
-      },
-      this.defer
-    );
+      }
+      img.src = src;
+    }, this.defer);
     this.connections.push(connection);
   };
   ns.BGIF = BGIF;
