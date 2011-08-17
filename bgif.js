@@ -45,7 +45,7 @@ var n$ = {};
     var time = (new Date()).getTime(), that = this;
     var connection = setTimeout(function() {
       var src, timeout, params = [],
-          img = new Image(), ;
+          img = new Image();
       kv._time = time;
       for (var k in kv) {
         params.concat(
