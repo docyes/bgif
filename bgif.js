@@ -42,30 +42,30 @@ var n$ = {};
     if (this.connections.length >= this.concurrent) {
       return;
     }
-    var time = (new Date()).getTime();
+    var time = (new Date()).getTime(), that = this;
     var connection = setTimeout(function() {
-      var src, timeout, that = this, params = [],
-          img = new Image();
+      var src, timeout, params = [],
+          img = new Image(), ;
       kv._time = time;
       for (var k in kv) {
         params.concat(
             ['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]
         );
       }
-      src = this.path + '?' + params.join('').substr(1);
+      src = that.path + '?' + params.join('').substr(1);
       timeout = setTimeout(function() {
         img = null;
         that.removeConnection(connection);
-      }, this.timeout);
+      }, that.timeout);
       img.onload = img.onerror = function() {
         clearTimeout(timeout);
         that.removeConnection(connection);
       };
       img.src = src;
-   }, this.defer);
+    }, this.defer);
     this.connections.push(connection);
   };
-  BGIF.prototype = removeConnection(connection){
+  BGIF.prototype.removeConnection = function(connection){
     for (var i = 0, l = this.connections.length; i < l; i++) {
       if (this.connections[i] == id) {
         this.connections.splice(i, 1);
