@@ -22,7 +22,7 @@ var n$ = {};
     this.options = options || {};
     this.enabled = this.options.hasOwnProperty('enabled') ?
         this.options.enabled : true;
-    this.defer = this.options.hasOwnPoperty('defer') ? this.options.defer : 0;
+    this.defer = this.options.hasOwnProperty('defer') ? this.options.defer : 0;
     this.concurrent = this.options.hasOwnProperty('concurrent') ?
         this.options.concurrent : 1;
     this.timeout = this.options.hasOwnProperty('timeout') ? 
