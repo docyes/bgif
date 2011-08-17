@@ -67,7 +67,7 @@ var n$ = {};
   };
   BGIF.prototype.removeConnection = function(connection){
     for (var i = 0, l = this.connections.length; i < l; i++) {
-      if (this.connections[i] == id) {
+      if (this.connections[i] == connection) {
         this.connections.splice(i, 1);
         break;
       }
