@@ -48,7 +48,7 @@ var n$ = {};
           img = new Image();
       kv._time = time;
       for (var k in kv) {
-        params.concat(
+        params = params.concat(
             ['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]
         );
       }
