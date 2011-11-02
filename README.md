@@ -43,17 +43,17 @@ example
     <div id="container">
         <a href="#" id="buynow">Buy Now!</a>
     </div>
-<script src="bgif.js"></script>
-<script>
-var bgif = new BGIF('http://featureblend.com/static/beacon.gif');
-document.getElementById('buynow').addEventListener('mouseover', function(){
-    bgif.log({
-        type: 'mouseover',
-        target: 'a',
-        goal: 'buynow'
+    <script src="bgif.js"></script>
+    <script>
+    var bgif = new BGIF('http://featureblend.com/static/beacon.gif');
+    document.getElementById('buynow').addEventListener('mouseover', function(){
+        bgif.log({
+            type: 'mouseover',
+            target: 'a',
+            goal: 'buynow'
+        });
     });
-});
-</script>
+    </script>
 </body>
 </html>
 
