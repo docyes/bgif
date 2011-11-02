@@ -1,5 +1,4 @@
-var n$ = {};
-(function(ns) {
+!function(ns) {
   /**
    * THAT'S ONE BGIF!
    *
@@ -74,5 +73,5 @@ var n$ = {};
     }
   };
   ns.BGIF = BGIF;
-})(n$);
+}(window);
 
