@@ -1,19 +1,11 @@
-import tornado, tornado.httpserver, tornado.ioloop, tornado.web
+import tornado
+import tornado.httpserver
+import tornado.ioloop
+import tornado.web
 
 class HomeHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("""
-        <html>
-            <head><title>async</title></head>
-            <body>
-                <script>
-                    var img = new Image();
-                    img.src = '/img.jpg?' + (new Date()).getTime();
-                    alert('test');
-                </script>
-            </body>
-        </html>
-        """)
+        self.render('test.html')
 
 class ImgHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous 
@@ -32,6 +24,7 @@ class ImgHandler(tornado.web.RequestHandler):
 application = tornado.web.Application([
     (r'/', HomeHandler),
     (r'/img.jpg', ImgHandler),
+    (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': '../'}),
 ])
 
 if __name__ == '__main__':
