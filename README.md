@@ -52,7 +52,7 @@ example
             target: 'a',
             goal: 'buynow'
         });
-    });
+    }, false);
     </script>
 </body>
 </html>
