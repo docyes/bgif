@@ -28,10 +28,13 @@ Inspired by the spacer.gif, bgif is a little bitty javascript library for loggin
 
 html
 ----
+``` html
 <a href="#" id="buynow">Buy Now!</a>
+```
 
 javascript
 ----------
+``` js
 var bgif = new BGIF('http://featureblend.com/static/beacon.gif');
 document.getElementById('buynow').addEventListener('mouseover', function(){
     bgif.log({
@@ -40,6 +43,7 @@ document.getElementById('buynow').addEventListener('mouseover', function(){
         goal: 'buynow'
     });
 });
+```
 
 access.log
 ----------
