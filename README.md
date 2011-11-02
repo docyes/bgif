@@ -56,6 +56,7 @@ example
     </script>
 </body>
 </html>
+```
 
 access.log
 ----------
