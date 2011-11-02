@@ -27,6 +27,7 @@
     this.timeout = this.options.hasOwnProperty('timeout') ? 
         this.options.timeout : 250
     this.connections = [];
+    this.tzoffset = (new Date()).getTimezoneOffset();
   }
   /**
    * LOG DAT SHIT!
@@ -45,7 +46,8 @@
     var connection = setTimeout(function() {
       var src, timeout, params = [],
           img = new Image();
-      kv._time = time;
+      kv.client_time = time;
+      kv.client_tzoffset = that.tzoffset;
       for (var k in kv) {
         params = params.concat(
             ['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]
