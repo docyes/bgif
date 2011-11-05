@@ -6,15 +6,10 @@
    *                 requests.
    * @param {Object} options Optional object literal of optional config
    *                                  params..
-   *                 @param {Boolean} enabled Defaults to true,
-   *                                  disable/enable HTTP requests.
-   *                 @param {Number}  defer Defaults to 0, the total ms to
-   *                                  wait before making a request.
-   *                 @param {Number}  concurrent Defaults to 1, the maximum
-   *                                  number of concurrent connections.
-   *                 @param {Number}  timeout Defaults to 250,
-   *                                  how long to wait for a request
-   *                                  before timing out.
+   *                 @param {Boolean} enabled Defaults to true, disable/enable HTTP requests.
+   *                 @param {Number} defer Defaults to 0, the total ms to wait before making a request.
+   *                 @param {Number} concurrent Defaults to 1, the maximum number of concurrent connections.
+   *                 @param {Number} timeout Defaults to 250, how long to wait for a request before timing out.
    */
   function BGIF(path, options) {
     this.path = path;
@@ -34,33 +29,52 @@
    *
    * @param {Object} kv A one-level deep object literal of key/value pairs.
    *                    Don't worry about escaping BGIF do it!
+   * @param {Object} options Optional object literal of optional config params...
+   *                 @param {Function} error Callback for when a log request could not be fullfilled.
+   *                 @param {Function} success Callback for when a log request is fullfilled.
    */
-  BGIF.prototype.log = function(kv) {
+  BGIF.prototype.log = function(kv, options) {
     if (!this.enabled) {
       return;
     }
+    var options = options || {},
+      errorCallback = options.error,
+      successCallback = options.success;
     if (this.connections.length >= this.concurrent) {
+      if (errorCallback) {
+        errorCallback('max'); 
+      }
       return;
     }
     var time = (new Date()).getTime(), that = this;
     var connection = setTimeout(function() {
       var src, timeout, params = [],
-          img = new Image();
+        img = new Image();
       kv.client_time = time;
       kv.client_tzoffset = that.tzoffset;
       for (var k in kv) {
         params = params.concat(
-            ['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]
+          ['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]
         );
       }
       src = that.path + '?' + params.join('').substr(1);
       timeout = setTimeout(function() {
         img = null;
         that.removeConnection(connection);
+        if (errorCallback) {
+          errorCallback('timeout'); 
+        }
       }, that.timeout);
       img.onload = img.onerror = function() {
+        var etype = event.type;
         clearTimeout(timeout);
         that.removeConnection(connection);
+        if (errorCallback && etype === 'error') {
+          errorCallback('load');
+        }
+        if (successCallback && etype === 'load') {
+          successCallback('load');
+        }
       };
       img.src = src;
     }, this.defer);
