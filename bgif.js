@@ -1,4 +1,10 @@
-!function(ns) {
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(factory);
+  }  else {
+    root = factory();
+  }
+}(this, function() {
   /**
    * THAT'S ONE BGIF!
    *
@@ -25,7 +31,7 @@
     this.tzoffset = (new Date()).getTimezoneOffset();
   }
   /**
-   * LOG DAT SHIT!
+   * LOG DAT!
    *
    * @param {Object} kv A one-level deep object literal of key/value pairs.
    *                    Don't worry about escaping BGIF do it!
@@ -88,6 +94,5 @@
       }
     }
   };
-  ns.BGIF = BGIF;
-}(window);
-
+  return BGIF;
+}));
