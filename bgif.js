@@ -60,15 +60,19 @@
       }
       return;
     }
-    var time = (new Date()).getTime(), that = this;
+    var time = (new Date()).getTime(), that = this, v;
     var connection = setTimeout(function() {
       var src, timeout, params = [],
         img = new Image();
       kv.client_time = time;
       kv.client_tzoffset = that.tzoffset;
       for (var k in kv) {
+        v = kv[k];
+        if (v typeof === 'function') {
+          v = v();
+        }
         params = params.concat(
-          ['&', encodeURIComponent(k), '=', encodeURIComponent(kv[k])]
+          ['&', encodeURIComponent(k), '=', encodeURIComponent(v)]
         );
       }
       src = that.path + '?' + params.join('').substr(1);
