@@ -2,7 +2,7 @@
   if (typeof define === 'function' && define.amd) {
     define(factory);
   }  else {
-    root = factory();
+    root.BGIF = factory();
   }
 }(this, function() {
   /**
@@ -16,6 +16,7 @@
    *                 @param {Number} defer Defaults to 0, the total ms to wait before making a request.
    *                 @param {Number} concurrent Defaults to 1, the maximum number of concurrent connections.
    *                 @param {Number} timeout Defaults to 250, how long to wait for a request before timing out.
+   *                 @param {Number} retry Defaults to 0, the number of times to retry a failed request.
    */
   function BGIF(path, options) {
     this.path = path;
@@ -27,6 +28,8 @@
         this.options.concurrent : 1;
     this.timeout = this.options.hasOwnProperty('timeout') ? 
         this.options.timeout : 250
+    this.retry = this.options.hasOwnProperty('retry') ?
+        this.options.retry : 0;
     this.connections = [];
     this.tzoffset = (new Date()).getTimezoneOffset();
   }
@@ -38,6 +41,7 @@
    * @param {Object} options Optional object literal of optional config params...
    *                 @param {Function} error Callback for when a log request could not be fullfilled.
    *                 @param {Function} success Callback for when a log request is fullfilled.
+   *                 @param {Number} count Comparison against retry setting.
    */
   BGIF.prototype.log = function(kv, options) {
     if (!this.enabled) {
@@ -45,10 +49,14 @@
     }
     var options = options || {},
       errorCallback = options.error,
-      successCallback = options.success;
+      successCallback = options.success,
+      count = options.hasOwnProperty('count') || 0;
     if (this.connections.length >= this.concurrent) {
-      if (errorCallback) {
-        errorCallback('max'); 
+      if (errorCallback && count >= this.retry) {
+        errorCallback('max', kv, options);
+      } else {
+        options.count = count++;
+        this.log(kv, options);
       }
       return;
     }
@@ -67,8 +75,11 @@
       timeout = setTimeout(function() {
         img = null;
         that.removeConnection(connection);
-        if (errorCallback) {
-          errorCallback('timeout'); 
+        if (errorCallback && count >= this.retry) {
+          errorCallback('timeout', kv, options); 
+        } else {
+          options.count = count++;
+          this.log(kv, options);
         }
       }, that.timeout);
       img.onload = img.onerror = function() {
@@ -76,10 +87,15 @@
         clearTimeout(timeout);
         that.removeConnection(connection);
         if (errorCallback && etype === 'error') {
-          errorCallback('load');
+          if (count >= this.retry) {
+            errorCallback('load', kv, options);
+          } else {
+            options.count = count++;
+            this.log(kv, options);       
+          }
         }
         if (successCallback && etype === 'load') {
-          successCallback('load');
+          successCallback('load', kv, options);
         }
       };
       img.src = src;
