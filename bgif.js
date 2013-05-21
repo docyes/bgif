@@ -78,7 +78,7 @@
       src = that.path + '?' + params.join('').substr(1);
       timeout = setTimeout(function() {
         img = null;
-        that.removeConnection(connection);
+        that._removeConnection(connection);
         if (errorCallback && retry >= this.retry) {
           errorCallback('timeout', kv, options); 
         } else {
@@ -89,7 +89,7 @@
       img.onload = img.onerror = function() {
         var etype = event.type;
         clearTimeout(timeout);
-        that.removeConnection(connection);
+        that._removeConnection(connection);
         if (errorCallback && etype === 'error') {
           if (retry >= this.retry) {
             errorCallback('load', kv, options);
@@ -106,7 +106,7 @@
     }, this.defer);
     this.connections.push(connection);
   };
-  BGIF.prototype.removeConnection = function(connection){
+  BGIF.prototype._removeConnection = function(connection){
     for (var i = 0, l = this.connections.length; i < l; i++) {
       if (this.connections[i] == connection) {
         this.connections.splice(i, 1);
