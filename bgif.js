@@ -14,7 +14,7 @@
    *                                  params..
    *                 @param {Boolean} enabled Defaults to true, disable/enable HTTP requests.
    *                 @param {Number} defer Defaults to 0, the total ms to wait before making a request.
-   *                 @param {Number} concurrent Defaults to 1, the maximum number of concurrent connections.
+   *                 @param {Number} concurrent Defaults to -1 (no limit), the maximum number of concurrent connections.
    *                 @param {Number} timeout Defaults to 250, how long to wait for a request before timing out.
    *                 @param {Number} retry Defaults to 0, the number of times to retry a failed request.
    */
@@ -25,7 +25,7 @@
         this.options.enabled : true;
     this.defer = this.options.hasOwnProperty('defer') ? this.options.defer : 0;
     this.concurrent = this.options.hasOwnProperty('concurrent') ?
-        this.options.concurrent : 1;
+        this.options.concurrent : -1;
     this.timeout = this.options.hasOwnProperty('timeout') ? 
         this.options.timeout : 250
     this.retry = this.options.hasOwnProperty('retry') ?
@@ -51,7 +51,7 @@
       errorCallback = options.error,
       successCallback = options.success,
       count = options.hasOwnProperty('count') || 0;
-    if (this.connections.length >= this.concurrent) {
+    if (this.concurrent >= 0 && this.connections.length >= this.concurrent) {
       if (errorCallback && count >= this.retry) {
         errorCallback('max', kv, options);
       } else {
