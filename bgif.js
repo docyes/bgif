@@ -41,7 +41,7 @@
    * @param {Object} options Optional object literal of optional config params...
    *                 @param {Function} error Callback for when a log request could not be fullfilled.
    *                 @param {Function} success Callback for when a log request is fullfilled.
-   *                 @param {Number} count Comparison against retry setting.
+   *                 @param {Number} retry The current attempt; used as comparison against retry constructor argument.
    */
   BGIF.prototype.log = function(kv, options) {
     if (!this.enabled) {
@@ -50,12 +50,12 @@
     var options = options || {},
       errorCallback = options.error,
       successCallback = options.success,
-      count = options.hasOwnProperty('count') || 0;
+      retry = options.hasOwnProperty('retry') || 0;
     if (this.concurrent >= 0 && this.connections.length >= this.concurrent) {
-      if (errorCallback && count >= this.retry) {
+      if (errorCallback && retry >= this.retry) {
         errorCallback('max', kv, options);
       } else {
-        options.count = count++;
+        options.retry = retry++;
         this.log(kv, options);
       }
       return;
@@ -79,10 +79,10 @@
       timeout = setTimeout(function() {
         img = null;
         that.removeConnection(connection);
-        if (errorCallback && count >= this.retry) {
+        if (errorCallback && retry >= this.retry) {
           errorCallback('timeout', kv, options); 
         } else {
-          options.count = count++;
+          options.retry = retry++;
           this.log(kv, options);
         }
       }, that.timeout);
@@ -91,10 +91,10 @@
         clearTimeout(timeout);
         that.removeConnection(connection);
         if (errorCallback && etype === 'error') {
-          if (count >= this.retry) {
+          if (retry >= this.retry) {
             errorCallback('load', kv, options);
           } else {
-            options.count = count++;
+            options.retry = retry++;
             this.log(kv, options);       
           }
         }
