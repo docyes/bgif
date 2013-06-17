@@ -68,7 +68,7 @@
       kv.client_tzoffset = that.tzoffset;
       for (var k in kv) {
         v = kv[k];
-        if (v typeof === 'function') {
+        if (typeof v === 'function') {
           v = v();
         }
         params = params.concat(
